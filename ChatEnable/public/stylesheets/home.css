@@ -1,0 +1,437 @@
+:root {
+    --color-content: rgb(255, 255, 255);
+    --color-borders: rgb(215, 215, 215);
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+/*
+    COMMON CODE:
+*/
+
+.friendsListItem {
+    position: relative;
+    top: 0;
+
+    width: 100%;
+    height : 10%;
+
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: var(--color-content);
+}
+
+.friendsListItem:hover {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.friendsListItem:active {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.friendsListItem:focus {
+    border: none;
+    box-shadow: none; 
+    outline: none;
+}
+
+.friendsListSeparator {
+    background-color: var(--color-borders);
+    height: 0.5%;
+    width: 100%;
+}
+
+.friendPicContainer {
+    position: absolute;
+    top: 50%;
+    left: 2.5%;
+
+    width: 10%;
+    height : 100%;
+
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.callMenu {
+    position: relative;
+    top: 0;
+
+    width: 100%;
+    height : 5%;
+
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: var(--color-content);
+}
+
+.friendCall {
+    position: absolute;
+    top: 50%;
+    left: 2.5%;
+
+    width: 10%;
+    height : 100%;
+
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+
+    border: none;
+    background-color: var(--color-content);
+}
+
+.friendCall:hover {
+    border: none;
+    box-shadow: none;
+    outline: none;
+    opacity: 0.6;
+}
+
+.friendCall:active {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.friendCall:focus {
+    border: none;
+    box-shadow: none; 
+    outline: none;
+}
+
+.friendEndCall {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+
+    width: 10%;
+    height : 100%;
+
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+
+    border: none;
+    background-color: var(--color-content);
+}
+
+.friendEndCall:hover {
+    border: none;
+    box-shadow: none;
+    outline: none;
+    opacity: 0.6;
+}
+
+.friendEndCall:active {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.friendEndCall:focus {
+    border: none;
+    box-shadow: none; 
+    outline: none;
+}
+
+.friendNameContainer {
+    position: absolute;
+    top: 0;
+    left: 10%;
+
+    width: 50%;
+    height: 100%;
+
+    font-size: 2em;
+}
+
+.friendTimeContainer {
+    position: absolute;
+    top: 0;
+    left: 75%;
+
+    width: 25%;
+    height: 100%;
+
+    font-size: 1em;
+}
+
+.friendNameContainer2 {
+    position: absolute;
+    top: 0;
+    left: 10%;
+
+    width: 50%;
+    height: 100%;
+
+    font-size: 0.7em;
+}
+
+.friendTimeContainer2 {
+    position: absolute;
+    top: 0;
+    left: 75%;
+
+    width: 25%;
+    height: 100%;
+
+    font-size: 0.5em;
+}
+
+.fields {
+    font-size: 100%;
+}
+
+input.checkbox {
+    transform: scale(1.5);
+}
+
+.centered {
+    text-align: center;
+}
+
+.centeredVert {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 100%;
+}
+
+#backToContacts {
+    top: 0;
+    right: 2%;
+    height: 90%;
+
+    font-size: 0.5em;
+    position: absolute;
+}
+
+/*
+    MAIN CONTAINERS CODE:
+*/
+
+#backgroundContainer {
+    width: 100%;
+    height: 100%;
+
+    left: 0;
+    top: 0;
+
+    font-size: 5vmin;
+}
+
+#contactsWindow {
+    position: absolute;
+
+    width: 100%;
+    height: 85%;
+
+    left: 0;
+    top: 0;
+    
+    background-color: var(--color-content);
+    overflow-y: auto;
+}
+
+#conversationWindow {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    left: 0;
+    top: 0;
+
+    background-color: var(--color-content);
+    display: none;
+}
+
+#conversationScreen {
+    position: absolute;
+
+    width: 100%;
+    height: calc(85% - 9px);
+
+    left: 0;
+    top: calc(15% + 9px);
+
+    background-color: black;
+}
+
+#hiddenScreens {
+    position: absolute;
+
+    width: 100%;
+    height: calc(85% - 9px);
+
+    left: 0;
+    top: 100%;
+
+    background-color: black;
+}
+
+#originalRemoteVideo {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+}
+
+#yourVideoScreen {
+    position: absolute;
+
+    width: 10%;
+    height: 10%;
+    right:0;
+    bottom: 0;
+}
+
+#videoScreen {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right:0;
+    left: 0;
+    bottom: 0;
+}
+
+#newLocalVideo {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right:0;
+    left: 0;
+    bottom: 0;
+}
+
+#back1 {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right:0;
+    left: 0;
+    bottom: 0;
+}
+
+#back2 {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right:0;
+    left: 0;
+    bottom: 0;
+}
+
+#profileWindow {
+    position: absolute;
+
+    width: 100%;
+    height: 85%;
+
+    left: 0;
+    top: 0;
+
+    background-color: var(--color-content);
+
+    display: none;
+}
+
+#settingsWindow {
+    position: absolute;
+
+    width: 100%;
+    height: 85%;
+
+    left: 0;
+    top: 0;
+
+    background-color: var(--color-content);
+
+    display: none;
+}
+
+#menuBar {
+    position: absolute;
+
+    width: 100%;
+    height: 15%;
+
+    left: 0;
+    top: calc(85% - 3px);
+
+    border-top-style: solid;
+    border-top-width: 3px;
+    border-top-color: var(--color-borders);
+
+    background-color: var(--color-content);
+}
+
+/*
+    MENU BAR CONTAINER CODE:
+*/
+
+#menuBarContactsButton {
+    position: absolute;
+
+    width: calc(100% / 3 - 2px);
+    height: 100%;
+
+    left: 0;
+    top: 0;
+
+    border-right-style: solid;
+    border-right-width: 3px;
+    border-right-color: var(--color-borders);
+}
+
+#menuBarProfileButton {
+    position: absolute;
+
+    width: calc(100% / 3 - 2px);
+    height: 100%;
+
+    left: calc(100% / 3 + 1px);
+    top: 0;
+
+    border-right-style: solid;
+    border-right-width: 3px;
+    border-right-color: var(--color-borders);
+}
+
+#menuBarSettingsButton {
+    position: absolute;
+
+    width: calc(100% / 3 - 2px);
+    height: 100%;
+
+    left: calc(200% / 3 + 2px);
+    top: 0;
+}
+
+/*
+    OTHER CODE:
+*/
+
+#userProfilePictureContainer {
+    width: 35vmin;
+    margin-left: calc((100% - 35vmin) / 2);
+}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/theme.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/home.css">
+	<title>Chat Home Page</title>
+	<meta charset="UTF-8">
+</head>
+
+<script src="/crypto/df.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    // Extract sent data
+    var data = JSON.parse('<%- data %>');
+
+    // Important vars
+    var activeUsers = [];
+    var free = true;
+    var myID = data.userData.id;
+    var callerID;
+    var cooldown = false;
+
+    // Socket.io code
+    var socket = io();
+    socket.emit('user connected', myID);
+
+</script>
+
+<body onload="initialize(data)" onresize="resizeAction()">
+    <!--
+        CLIENT JS SCRIPT:
+    -->
+    <script src="/javascripts/client_home.js"></script>
+    <script src="/javascripts/client_common.js"></script>
+
+    <div id="backgroundContainer">
+        <div id="contactsWindow">
+            
+        </div>
+        <div id="conversationWindow">
+
+            <div class="friendsListItem">
+                <div class="friendPicContainer"> <img src="/images/profile_pic_default.png" class="icon2" id="convo_pic"> </div>
+                <div class="friendNameContainer2"> <div class="centeredVert"> <div class="centered" id="convo_name"> </div> </div> </div>
+                <div class="friendTimeContainer2"> <div class="centeredVert"> <div class="centered" id="convo_time"> </div> </div> </div>
+                <input type="hidden" id="convo_id">
+            </div>
+            <div class="friendsListSeparator"></div>
+            <div class="callMenu">
+                <button class="friendCall"> <img src="/images/call.png" class="icon2" onclick="makeCallInit()"> </button>
+                <button class="friendEndCall"> <img src="/images/call_end.png" class="icon2" onclick="endCallInit()"> </button>
+                <button class="buttonOrange" id="backToContacts" onclick="switchConvoDisplayWithClose()">Back</button>
+            </div>
+            <div class="friendsListSeparator"></div>
+
+            <div id="conversationScreen">
+                <video autoplay="true" id="videoScreen" height="100" width="100"></video>
+                <video autoplay="true" muted id="yourVideoScreen" height="100" width="100"></video>
+            </div>
+
+        </div>
+        <div id="profileWindow">
+
+            <div class="centeredVert">
+                <div class="centered">
+                    <div id="userProfilePictureContainer">
+                        <button class="iconBtnProfilePic" onclick="uploadProfilePicture()" title="Change profile picture"><img src="/images/profile_pic_default.png" class="icon" id="profilePicture"></button>
+                    </div>
+                    <div class="userNameDisplay"></div>
+                    <div class="userUsernameDisplay"></div><br>
+                    <div class="userIdDisplay"></div><br>
+                    <div class="userEmailDisplay"></div>
+                </div>
+            </div>
+
+        </div>
+        <div id="settingsWindow">
+
+            <div class="centeredVert">
+                <div class="centered">
+                    <form action="/change-password" method="POST" onsubmit="return validateFormChangePass()">
+                        <p>Change your password:</p>
+                        <input id="passwordReset" type="password" name="passwordReset" class="fields">
+                        <button type="submit" class="buttonLightBlue">Change</button>
+                    </form>
+                    <form action="/change-email" method="POST" onsubmit="return validateFormChangeEmail()">
+                        <p>Change your email:</p>
+                        <input id="emailReset" type="text" name="emailReset" class="fields">
+                        <button type="submit" class="buttonLightBlue">Change</button>
+                        <br>
+                    </form>
+                    <form action="/add-friend" method="POST" onsubmit="return validateFormAddFriend()">
+                        <p>Add a friend:</p>
+                        <input id="addFriend" type="text" name="addFriend" class="fields">
+                        <button type="submit" class="buttonLightBlue">Add friend</button>
+                        <br><br>
+                    </form>
+                    <form method="POST" action="/logout">
+                        <button type="submit" class="buttonRed" id="logoutButton">Logout</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div id="menuBar">
+            <div id="menuBarContactsButton">
+                <button class="iconBtn" onclick="menuAction(0)"><img src="/images/phone.png" id="mobileMenuContactsButtonIcon" class="icon"></button>
+            </div>
+            <div id="menuBarProfileButton">
+                <button class="iconBtn" onclick="menuAction(1)"><img src="/images/user_inactive.png" id="mobileMenuProfileButtonIcon" class="icon"></button>
+            </div>
+            <div id="menuBarSettingsButton">
+                <button class="iconBtn" onclick="menuAction(2)"><img src="/images/settings_inactive.png" id="mobileMenuSettingsButtonIcon" class="icon"></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="hiddenScreens">
+        <canvas id="newLocalVideo" height="100" width="100"></canvas>
+        <canvas id="vid" height="100" width="100"></canvas>
+        <canvas id="back1" height="100" width="100"></canvas>
+        <canvas id="back2" height="100" width="100"></canvas>
+    </div>
+</body>
+</html>

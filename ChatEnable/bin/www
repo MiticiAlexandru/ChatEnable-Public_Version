@@ -1,0 +1,276 @@
+#!/usr/bin/env node
+
+const localhost = 'localhost';
+const thisIp = '0.0.0.0';
+var ip = thisIp;
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('chatenable:server');
+var https = require('https');
+var fs = require('fs');
+var path = require('path');
+var chalk = require('chalk');
+
+// MySql connection
+var db = require('../config/databaseConnection');
+var Df = require('../public/crypto/df').Df;
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var portHTTP = normalizePort(process.env.PORT || '3000');
+var portHTTPS = normalizePort(process.env.PORT || '443');
+
+var port = portHTTPS;
+app.set('port', port);
+
+/**
+ * Create HTTPS server.
+ */
+
+var server = https.createServer({
+  cert: fs.readFileSync(path.join(__dirname, 'ssl', 'server.crt')),
+  key: fs.readFileSync(path.join(__dirname, 'ssl', 'server.key')),
+}, app);
+
+var io = require('socket.io')(server);
+const serverID = 'server';
+var serverKeys = [];
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port, ip, function() {
+  console.log(chalk.green('Listening on port: ' + port));
+});
+server.on('error', onError);
+server.on('listening', onListening);
+
+// Active user and calls lists
+var activeUsers = [];
+var callList = [];
+
+function isOnline(id) {
+  if(activeUsers.includes(id))
+      return true;
+  return false;
+}
+
+async function removeCalls(id1) {
+  let li = [], id2 = [];
+  callList.forEach((elem) => {
+    if(elem[0] == id1) {
+      li.push(callList.indexOf(elem));
+      id2.push(elem[1]);
+    }
+  });
+
+  callList.forEach((elem) => {
+    if(elem[1] == id1) {
+      li.push(callList.indexOf(elem));
+      id2.push(elem[0]);
+    }
+  });
+
+  await li.forEach(async (elem) => {
+    callList.splice(elem, 1);
+    io.emit('mark as free', id1);
+    await id2.forEach(async (elem) => {
+      io.emit('mark as free', elem);
+
+      // Mark new lastCall time in the db
+      const time = Date.now();
+      await db.updateLastCall(id1, id2, time);
+      console.log(chalk.bold.red('\nCall ended between ' + id1 + chalk.bold.red(' and ') + id2 + '\n'));
+
+      io.emit('change lastCall time', [id1, id2, time]);
+      io.emit('change lastCall time', [id2, id1, time]);
+    });
+  });
+}
+
+// Socket.io setup
+io.on('connection', (socket) => {
+  socket.userID = null;
+  socketID = socket.id;
+  console.log(chalk.bold.green('User connected'));
+
+  socket.on('disconnect', async () => {
+    console.log(chalk.bold.red('User disconnected'));
+    if(activeUsers.includes(socket.userID)) {
+      await removeCalls(socket.userID);
+      var i = activeUsers.indexOf(socket.userID);
+      activeUsers.splice(i, 1);
+      io.emit('user update', activeUsers);
+    }
+  });
+
+  socket.on('user connected', (id) => {
+    if(!activeUsers.includes(id)) {
+      activeUsers.push(id);
+      socket.userID = id;
+    }
+    io.emit('user update', activeUsers);
+  });
+
+  // If a call was requested, send request to friend
+  socket.on('make call', ([userID, friendID]) => {
+    if(isOnline(userID) == true && isOnline(friendID) == true)
+      io.emit('accept call', [friendID, userID]);
+  });
+
+  // If call was accepted, add it to the list
+  socket.on('accepted call', async ([id1, id2]) => {
+    if(isOnline(id1) == true && isOnline(id2) == true) {
+      await removeCalls(id1);
+      await removeCalls(id2);
+      callList.push([id1, id2]);
+      io.emit('mark as busy', [id1, id2]);
+      io.emit('mark as busy', [id2, id1]);
+
+      io.emit('change lastCall time', [id1, id2, null]);
+      io.emit('change lastCall time', [id2, id1, null]);
+
+      io.emit('ask connection', { userID: id1, friendID: id2 });
+      console.log(chalk.bold.green('\nInitiate call between ') + id1 + chalk.bold.green(' and ') + id2 + '\n');
+    }
+  });
+
+  socket.on('make offer', (data) => {
+    if(data.offerType == 'initial')
+      console.log(chalk.bold.yellow('\nInitial offer:'));
+    else
+      console.log(chalk.bold.yellow('\nRenegotiation:'));
+    console.log(chalk.bold.blue('Offer made from ') + data.from + chalk.bold.blue(' to ') + data.to + '\n');
+    socket.broadcast.emit('offer made', { offer: data.offer, to: data.to, from: data.from });
+  });
+
+  socket.on('make answer', (data) => {
+    console.log(chalk.bold.blue('\nAnswer sent from ') + data.from + chalk.bold.blue(' to ') + data.to + '\n');
+    socket.broadcast.emit('answer made', { answer: data.answer, to: data.to, from: data.from });
+  });
+
+  socket.on('send ICE candidate', (data) => {
+    console.log(chalk.bold.blue('\nICE candidate ') + data.candidate + chalk.bold.blue(' from ') + data.from + chalk.bold.blue(' to ') + data.to + '\n');
+    socket.emit('send ICE candidate', {
+      candidate: data.candidate,
+      from: data.from,
+      to: data.to
+    });
+  });
+
+  socket.on('server pc connection change', (data) => {
+    console.log(chalk.bold.yellow('\nState changed between ') + data.between[0] + chalk.bold.yellow(' and ') + data.between[1]);
+    console.log(chalk.bold.yellow('Peer connection state: ') + data.state + chalk.bold.yellow('; ICE connection state: ') + data.iceState + ';\n');
+  });
+
+  socket.on('key exchange - public and generated key', (data) => {
+    console.log(chalk.bold.blue('\nPublic key ') + data.publicKey + chalk.bold.blue(' from ') + data.from + chalk.bold.blue(' to ') + data.to);
+    console.log(chalk.bold.blue('Generated public key ') + data.generatedKey + chalk.bold.blue(' from ') + data.from + chalk.bold.blue(' to ') + data.to + '\n');
+
+    if(data.to == serverID) {
+      var df = new Df(serverID, data.from);
+      df.setPublicKey(data.publicKey);
+      df.setPrivateKey();
+      df.setGeneratedKey();
+      df.setSharedSecretKey(BigInt(data.generatedKey));
+
+      serverKeys.push(df);
+      var tmp = df.getGeneratedKey().toString();
+
+      console.log(chalk.bold.blue('Generated public key ') + tmp + chalk.bold.blue(' from ') + data.to + chalk.bold.blue(' to ') + data.from + '\n');
+      socket.emit('key exchange - generated key', {
+        from: data.to,
+        to: data.from,
+        generatedKey: tmp
+      });
+    } else {
+      socket.broadcast.emit('key exchange - public and generated key', {
+        from: data.from,
+        to: data.to,
+        publicKey: data.publicKey,
+        generatedKey: data.generatedKey
+      });
+    }
+  });
+
+  socket.on('key exchange - generated key', (data) => {
+    console.log(chalk.bold.blue('Generated public key ') + data.generatedKey + chalk.bold.blue(' from ') + data.from + chalk.bold.blue(' to ') + data.to + '\n');
+    socket.broadcast.emit('key exchange - generated key', {
+      from: data.from,
+      to: data.to,
+      generatedKey: data.generatedKey
+    });
+  });
+
+  // Remove call from call list
+  socket.on('end call', async (id) => {
+    await removeCalls(id);
+  });
+});
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

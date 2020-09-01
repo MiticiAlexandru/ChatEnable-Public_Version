@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/theme.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/login.css">
+	<meta charset="UTF-8">
+</head>
+
+<script>
+    // Extract sent data:
+    var data = JSON.parse('<%- data %>');
+    var id = data.userData.id;
+
+    function addID(id) { document.getElementById('id').value = id; resizeAction(); }
+</script>
+
+<body onload="addID(id)" onresize="resizeAction()">
+    <!--
+        CLIENT JS SCRIPT:
+    -->
+    <script src="/javascripts/client_login.js"></script>
+    <script src="/javascripts/client_common.js"></script>
+
+    <div id="backgroundContainer">
+        <div id="loginContainer">
+            <p>Upload a new profile picture.</p>
+            <form method="POST" action="/upload-process" enctype="multipart/form-data">
+                <label class="buttonOrange">
+                    <input type="file" name="image" style="display:none" onchange="checkChange()" id="imageUpload">
+                    Choose image
+                </label><br><br>
+                <input type="hidden" name="id" id="id">
+                <button type="button" name="back" class="buttonLightBlue" onclick="redirectTo('/home')">Back</button>
+                &nbsp;&nbsp;&nbsp;
+                <button type="submit" name="upload" class="buttonLightBlue" id="submitUpload" disabled>Upload</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

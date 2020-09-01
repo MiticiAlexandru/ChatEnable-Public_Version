@@ -1,0 +1,25 @@
+:root {
+    --color-white: rgb(255, 255, 255);
+}
+
+/*
+    PAGE AND BACKGROUND CODE:
+*/
+
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+#backgroundContainer {
+    height: 100%;
+
+    background-image: url("/images/background_1.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.hidden {
+    display: none;
+}

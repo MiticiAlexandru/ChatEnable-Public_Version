@@ -1,0 +1,4 @@
+node_modules/
+/public/userProfilePictures/**
+!/public/userProfilePictures/**/
+!/public/userProfilePictures/**/.gitkeep

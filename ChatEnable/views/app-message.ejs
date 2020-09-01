@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/theme.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/app-message.css">
+	<title>App message</title>
+	<meta charset="UTF-8">
+</head>
+<body onload="createAppMessage()" onresize="resizeAction()">
+    <!--
+        CLIENT JS SCRIPT:
+    -->
+    <script src="/javascripts/client_app_message.js"></script>
+    <script src="/javascripts/client_common.js"></script>
+
+    <div id="backgroundContainer"></div>
+
+    <div class='hidden'>
+        <div class='hidden' id="POSTmessage"><%= message %></div>
+        <div class='hidden' id="POSTimage"><%= image %></div>
+        <div class='hidden' id="POSTbuttonNames"><%= buttonNames %></div>
+        <div class='hidden' id="POSTbuttonTypes"><%= buttonTypes %></div>
+        <div class='hidden' id="POSTbuttonRedirectTo"><%= buttonRedirectTo %></div>
+        <div class='hidden' id="POSTwithCloseButton"><%= withCloseButton %></div>
+    </div>
+
+</body>
+</html>

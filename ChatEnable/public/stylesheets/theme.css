@@ -1,0 +1,182 @@
+.buttonLightBlue {
+    color: white;
+    background: #4C8FFB;
+    border: 1px #3079ED solid;
+    box-shadow: inset 0 1px 0 #80B0FB;
+    
+    font-size: 100%;
+}
+
+.buttonLightBlue:hover {
+    border: 1px #2F5BB7 solid;
+    box-shadow: 0 1px 1px #EAEAEA, inset 0 1px 0 #5A94F1;
+    background: #3F83F1;
+}
+
+.buttonLightBlue:active {
+    box-shadow: inset 0 2px 5px #2370FE;   
+}
+
+.buttonOrange {
+    color: white;
+    background: rgb(251, 190, 76);
+    border: 1px rgb(237, 177, 48) solid;
+    box-shadow: inset 0 1px 0 rgb(251, 218, 128);
+    
+    font-size: 100%;
+}
+
+.buttonOrange:hover {
+    border: 1px rgb(183, 140, 47) solid;
+    box-shadow: 0 1px 1px #EAEAEA, inset 0 1px 0 rgb(241, 181, 90);
+    background: rgb(241, 179, 63);
+}
+
+.buttonOrange:active {
+    box-shadow: inset 0 2px 5px rgb(254, 177, 35);   
+}
+
+.buttonRed {
+    color: white;
+    background: rgb(251, 76, 76);
+    border: 1px rgb(237, 48, 48) solid;
+    box-shadow: inset 0 1px 0 rgb(251, 128, 128);
+    
+    font-size: 100%;
+}
+
+.buttonRed:hover {
+    border: 1px rgb(183, 47, 47) solid;
+    box-shadow: 0 1px 1px #EAEAEA, inset 0 1px 0 rgb(241, 90, 90);
+    background: rgb(241, 63, 63);
+}
+
+.buttonRed:active {
+    box-shadow: inset 0 2px 5px rgb(254, 35, 35); 
+}
+
+.APPmessageContainer {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+
+    border-radius: 25px;
+
+    margin-top: 10%;
+    margin-left: 25%;
+    
+    font-family: Arial, sans-serif;
+    font-size: 3.5vmin;
+    text-align: center;
+
+    background-color: white;
+}
+
+.APPmessageText {
+    position: relative;
+    height: 40%;
+}
+
+.APPmessageIcon {
+    max-width: 10.5vmin;
+    max-height: 10.5vmin;
+
+    object-fit: contain;
+}
+
+.icon {
+    max-width: 70%;
+    max-height: 70%;
+
+    object-fit: contain;
+}
+
+.icon2 {
+    max-width: 100%;
+    max-height: 100%;
+
+    object-fit: contain;
+}
+
+.iconBtn {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    background-color: var(--color-content);
+
+    left: 0;
+    top: 0;
+}
+
+.iconBtn:focus {
+    outline: none;
+}
+
+.iconBtn2 {
+    position: relative;
+    padding-top: 1%;
+    width: 10%;
+    height: 10%;
+
+    border: none;
+    background-color: var(--color-content);
+}
+
+.iconBtn2:hover {
+    outline: none;
+    opacity: 0.7;
+}
+
+.iconBtn2:focus {
+    outline: none;
+    opacity: 0.7;
+}
+
+.iconBtnProfilePic {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    background-color: var(--color-content);
+}
+
+.iconBtnProfilePic:hover {
+    outline: none;
+    opacity: 0.7;
+}
+
+.iconBtnProfilePic:focus {
+    outline: none;
+    opacity: 0.7;
+}
+
+#closeWindowButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 10%;
+    height: 10%;
+
+    border: none;
+    background-color: var(--color-content);
+}
+
+#closeWindowButton:hover {
+    outline: none;
+    opacity: 0.7;
+}
+
+#closeWindowButton:focus {
+    outline: none;
+    opacity: 0.7;
+}
+
+.iconFieldset {
+    font-size: 3.5vmin;
+    font-family: sans-serif;
+    border: none;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/theme.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/login.css">
+	<title>Chat Login Page</title>
+	<meta charset="UTF-8">
+</head>
+<body onload="initialize()" onresize="resizeAction()">
+    <!--
+        CLIENT JS SCRIPT:
+    -->
+    <script src="/javascripts/client_login.js"></script>
+    <script src="/javascripts/client_common.js"></script>
+
+    <div id="backgroundContainer">
+        <!--
+            LOGIN WINDOW CODE:
+        -->
+        <div id="loginContainer">
+            <form action="/activate-process" method="POST">
+            <div class="upper_container">
+                <p>Activate your account.<br></p>
+                <div>
+                    <label for="username">Username:</label>
+                    <input id="usernameField" type="text" name="username" class="fields"><br>
+                </div>
+                <p></p>
+                <div>
+                    <label for="token">Token:</label>
+                    <input id="passwordField" type="password" name="token" class="fields">
+                </div>
+            </div>
+
+            <div class="logo_container">
+                <img src="/images/logo.png" class="icon2">
+            </div>
+
+            <div class="lower_container">
+                <span>
+                <p>
+                    <button type="submit" class="buttonLightBlue" id="loginButton">Activate account</button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button type="button" class="buttonLightBlue" id="cancel" onclick="backToLogin()">Back to login</button><br><br>
+                </p>
+                </span>
+            </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
